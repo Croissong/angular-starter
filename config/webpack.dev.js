@@ -105,18 +105,18 @@ module.exports = function (options) {
          */
         {
           test: /\.css$/,
-          use: ['style-loader', 'css-loader'],
-          include: [helpers.root('src', 'styles')]
-        },
-
-        /**
-         * Sass loader support for *.scss files (styles directory only)
-         * Loads external sass styles into the DOM, supports HMR
-         *
-         */
-        {
-          test: /\.scss$/,
-          use: ['style-loader', 'css-loader', 'sass-loader'],
+          use: [
+            {
+              loader: 'style-loader'
+            }, {
+              loader: 'css-loader',
+              options: {
+                importLoaders: 1
+              }
+            }, {
+              loader: 'postcss-loader'
+            }
+          ],
           include: [helpers.root('src', 'styles')]
         },
 
@@ -235,10 +235,10 @@ module.exports = function (options) {
         ignored: /node_modules/
       },
       /**
-      * Here you can access the Express app object and add your own custom middleware to it.
-      *
-      * See: https://webpack.github.io/docs/webpack-dev-server.html
-      */
+       * Here you can access the Express app object and add your own custom middleware to it.
+       *
+       * See: https://webpack.github.io/docs/webpack-dev-server.html
+       */
       setup: function(app) {
         // For example, to define custom handlers for some paths:
         // app.get('/some/path', function(req, res) {

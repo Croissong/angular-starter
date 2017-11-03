@@ -125,19 +125,20 @@ module.exports = function (options) {
          */
         {
           test: /\.css$/,
-          loader: ['to-string-loader', 'css-loader'],
+          use: [
+            {
+              loader: 'to-string-loader'
+            }, {
+              loader: 'css-loader',
+              options: {
+                importLoaders: 1,
+                minimize: isProd
+              }
+            }, {
+              loader: 'postcss-loader'
+            }
+          ],
           exclude: [helpers.root('src/index.html')]
-        },
-
-        /**
-         * Raw loader support for *.scss files
-         *
-         * See: https://github.com/webpack/raw-loader
-         */
-        {
-            test: /\.scss$/,
-            loader: ['raw-loader', 'sass-loader'],
-            exclude: [helpers.root('src/index.html')]
         },
 
         /**
@@ -164,8 +165,8 @@ module.exports = function (options) {
           loader: 'istanbul-instrumenter-loader',
           include: helpers.root('src'),
           exclude: [
-            /\.(e2e|spec)\.ts$/,
-            /node_modules/
+              /\.(e2e|spec)\.ts$/,
+              /node_modules/
           ]
         }
 
@@ -211,7 +212,7 @@ module.exports = function (options) {
         /**
          * The (\\|\/) piece accounts for path separators in *nix and Windows
          */
-        /angular(\\|\/)core(\\|\/)@angular/,
+          /angular(\\|\/)core(\\|\/)@angular/,
         helpers.root('src'), // location of your src
         {
           /**

@@ -5,11 +5,11 @@
 const helpers = require('./helpers');
 /**
  * Used to merge webpack configs
-*/
+ */
 const webpackMerge = require('webpack-merge');
 /**
  * The settings that are common to prod and dev
-*/
+ */
 const commonConfig = require('./webpack.common.js');
 
 /**
@@ -105,19 +105,16 @@ module.exports = function (env) {
           test: /\.css$/,
           loader: ExtractTextPlugin.extract({
             fallback: 'style-loader',
-            use: 'css-loader'
-          }),
-          include: [helpers.root('src', 'styles')]
-        },
-
-        /**
-         * Extract and compile SCSS files from .src/styles directory to external CSS file
-         */
-        {
-          test: /\.scss$/,
-          loader: ExtractTextPlugin.extract({
-            fallback: 'style-loader',
-            use: 'css-loader!sass-loader'
+            use: [
+              {
+                loader: 'css-loader',
+                options: {
+                  importLoaders: 1
+                }
+              }, {
+                loader: 'postcss-loader'
+              }
+            ]
           }),
           include: [helpers.root('src', 'styles')]
         },
@@ -203,12 +200,12 @@ module.exports = function (env) {
        * See: http://webpack.github.io/docs/list-of-plugins.html#normalmodulereplacementplugin
        */
       new NormalModuleReplacementPlugin(
-        /(angular2|@angularclass)((\\|\/)|-)hmr/,
+          /(angular2|@angularclass)((\\|\/)|-)hmr/,
         helpers.root('config/empty.js')
       ),
 
       new NormalModuleReplacementPlugin(
-        /zone\.js(\\|\/)dist(\\|\/)long-stack-trace-zone/,
+          /zone\.js(\\|\/)dist(\\|\/)long-stack-trace-zone/,
         helpers.root('config/empty.js')
       ),
 
@@ -220,7 +217,7 @@ module.exports = function (env) {
        */
       (AOT ? (
         new NormalModuleReplacementPlugin(
-          /@angular(\\|\/)compiler/,
+            /@angular(\\|\/)compiler/,
           helpers.root('config/empty.js')
         )
       ) : (new LoaderOptionsPlugin({}))),

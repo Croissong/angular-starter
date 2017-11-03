@@ -66,7 +66,7 @@ module.exports = function (options) {
 
       'polyfills': './src/polyfills.browser.ts',
       'main':      AOT ? './src/main.browser.aot.ts' :
-                  './src/main.browser.ts'
+        './src/main.browser.ts'
 
     },
 
@@ -154,18 +154,19 @@ module.exports = function (options) {
          */
         {
           test: /\.css$/,
-          use: ['to-string-loader', 'css-loader'],
-          exclude: [helpers.root('src', 'styles')]
-        },
-
-        /**
-         * To string and sass loader support for *.scss files (from Angular components)
-         * Returns compiled css content as string
-         *
-         */
-        {
-          test: /\.scss$/,
-          use: ['to-string-loader', 'css-loader', 'sass-loader'],
+          use: [
+            {
+              loader: 'to-string-loader'
+            }, {
+              loader: 'css-loader',
+              options: {
+                importLoaders: 1,
+                minimize: isProd
+              }
+            }, {
+              loader: 'postcss-loader'
+            }
+          ],
           exclude: [helpers.root('src', 'styles')]
         },
 
@@ -190,7 +191,7 @@ module.exports = function (options) {
         },
 
         /* File loader for supporting fonts, for example, in CSS files.
-        */
+         */
         {
           test: /\.(eot|woff2?|svg|ttf)([\?]?.*)$/,
           use: 'file-loader'
@@ -208,7 +209,7 @@ module.exports = function (options) {
     plugins: [
       // Remove all locale files in moment with the IgnorePlugin if you don't need them
       // new IgnorePlugin(/^\.\/locale$/, /moment$/),
-      
+
       // Use for DLLs
       // new AssetsPlugin({
       //   path: helpers.root('dist'),
@@ -265,7 +266,7 @@ module.exports = function (options) {
         /**
          * The (\\|\/) piece accounts for path separators in *nix and Windows
          */
-        /(.+)?angular(\\|\/)core(.+)?/,
+          /(.+)?angular(\\|\/)core(.+)?/,
         helpers.root('src'), // location of your src
         {
           /**
@@ -286,8 +287,8 @@ module.exports = function (options) {
         { from: 'src/assets', to: 'assets' },
         { from: 'src/meta'}
       ],
-        isProd ? { ignore: [ 'mock-data/**/*' ] } : undefined
-      ),
+                            isProd ? { ignore: [ 'mock-data/**/*' ] } : undefined
+                           ),
 
       /*
        * Plugin: PreloadWebpackPlugin
@@ -309,13 +310,13 @@ module.exports = function (options) {
       //}),
 
       /*
-      * Plugin: HtmlWebpackPlugin
-      * Description: Simplifies creation of HTML files to serve your webpack bundles.
-      * This is especially useful for webpack bundles that include a hash in the filename
-      * which changes every compilation.
-      *
-      * See: https://github.com/ampedandwired/html-webpack-plugin
-      */
+       * Plugin: HtmlWebpackPlugin
+       * Description: Simplifies creation of HTML files to serve your webpack bundles.
+       * This is especially useful for webpack bundles that include a hash in the filename
+       * which changes every compilation.
+       *
+       * See: https://github.com/ampedandwired/html-webpack-plugin
+       */
       new HtmlWebpackPlugin({
         template: 'src/index.html',
         title: METADATA.title,
@@ -327,7 +328,7 @@ module.exports = function (options) {
         inject: 'body'
       }),
 
-       /**
+      /**
        * Plugin: ScriptExtHtmlWebpackPlugin
        * Description: Enhances html-webpack-plugin functionality
        * with different deployment options for your scripts including:
