@@ -1,0 +1,17 @@
+<nav>
+  <a [routerLink]=" ['./'] "
+    routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">
+    Index
+  </a>
+  <a [routerLink]=" ['./detail'] "
+    routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">
+    Detail
+  </a>
+</nav>
+
+<main>
+  <router-outlet></router-outlet>
+</main>
+
+<footer>
+</footer>

@@ -10,12 +10,15 @@
     "noEmit": true,
     "noEmitHelpers": true,
     "importHelpers": true,
-    "strictNullChecks": false,
+    "strictNullChecks": true,
+    "noUnusedLocals": false,
+    "removeComments": true,
+    "noImplicitAny": true,
     "lib": [
       "dom",
-      "es6"
+      "ES2017"
     ],
-    "baseUrl": ".",
+    "baseUrl": "src",
     "paths": {
       "@angular/*": ["node_modules/@angular/*"]
     },
